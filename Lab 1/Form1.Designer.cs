@@ -340,6 +340,7 @@ namespace Lab_1
             this.Controls.Add(this.PlusMinusButton);
             this.Controls.Add(this.DeleteLastButton);
             this.Controls.Add(this.buttonCancel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MainForm";
             this.Text = "Калькулятор";
             this.ResumeLayout(false);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -9,7 +10,8 @@ namespace Lab_1
     public partial class MainForm : Form
     {
         private bool wasDot;
-        private int lastSymbolPos;
+        private List<int> lastSymbolPos = new List<int>();
+        private int symbolsCount;
         public MainForm()
         {
             InitializeComponent();
@@ -82,6 +84,8 @@ namespace Lab_1
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             OutTextBox.Text = "";
+            lastSymbolPos.Clear();
+            symbolsCount = 0;
         }
 
         private void DeleteLastButton_Click(object sender, EventArgs e)
@@ -90,7 +94,15 @@ namespace Lab_1
                 return;
             if (OutTextBox.Text[OutTextBox.Text.Length - 1] == '.')
                 wasDot = false;
+            if(lastSymbolPos.Count > 0)
+                if (OutTextBox.Text.Length == lastSymbolPos[symbolsCount - 1])
+                {
+                    lastSymbolPos.RemoveAt(lastSymbolPos.Count - 1);
+                    symbolsCount--;
+                }
+
             OutTextBox.Text = OutTextBox.Text.Remove(OutTextBox.Text.Length - 1);
+            
             
         }
 
@@ -98,7 +110,7 @@ namespace Lab_1
         {
             if (OutTextBox.Text.Length != 0)
             {
-                if (lastSymbolPos == 0)
+                if (lastSymbolPos.Count == 0)
                 {
                     if (OutTextBox.Text[0] == '-')
                         OutTextBox.Text = OutTextBox.Text.Remove(0, 1);
@@ -107,7 +119,16 @@ namespace Lab_1
                 }
                 else
                 {
-                    OutTextBox.Text = OutTextBox.Text.Insert(lastSymbolPos, "-");    
+                    if (OutTextBox.Text.Length == lastSymbolPos[symbolsCount - 1])
+                    {
+                        OutTextBox.Text = OutTextBox.Text.Insert(OutTextBox.Text.Length, "-");
+                        return;
+                    }
+
+                    if (OutTextBox.Text[lastSymbolPos[symbolsCount - 1]] == '-')
+                        OutTextBox.Text = OutTextBox.Text.Remove(lastSymbolPos[symbolsCount - 1], 1);
+                    else
+                        OutTextBox.Text = OutTextBox.Text.Insert(lastSymbolPos[symbolsCount - 1], "-");    
                 }
             }
 
@@ -130,6 +151,8 @@ namespace Lab_1
             {
                 if (OutTextBox.Text != "")
                     OutTextBox.Text = new DataTable().Compute(OutTextBox.Text, null).ToString();
+                lastSymbolPos.Clear();
+                symbolsCount = 0;
             }
             catch (WrongFormatException a)
             {
@@ -146,7 +169,8 @@ namespace Lab_1
         {
             if (CheckOperationBefore())
                 OutTextBox.Text += '+';
-            lastSymbolPos = OutTextBox.Text.Length;
+            lastSymbolPos.Add(OutTextBox.Text.Length);
+            symbolsCount++;
             wasDot = false;
         }
         
@@ -155,7 +179,8 @@ namespace Lab_1
         {
             if (CheckOperationBefore())
                 OutTextBox.Text += '-';
-            lastSymbolPos = OutTextBox.Text.Length;
+            lastSymbolPos.Add(OutTextBox.Text.Length);
+            symbolsCount++;
             wasDot = false;
         }
 
@@ -163,7 +188,8 @@ namespace Lab_1
         {
             if (CheckOperationBefore())
                 OutTextBox.Text += '*';
-            lastSymbolPos = OutTextBox.Text.Length;
+            lastSymbolPos.Add(OutTextBox.Text.Length);
+            symbolsCount++;
             wasDot = false;
         }
 
@@ -171,7 +197,8 @@ namespace Lab_1
         {
             if (CheckOperationBefore())
                 OutTextBox.Text += '/';
-            lastSymbolPos = OutTextBox.Text.Length;
+            lastSymbolPos.Add(OutTextBox.Text.Length);
+            symbolsCount++;
             wasDot = false;
 
 
