@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Lab_1
 {
@@ -149,8 +150,16 @@ namespace Lab_1
         {
             try
             {
+                string checkStr;
                 if (OutTextBox.Text != "")
-                    OutTextBox.Text = new DataTable().Compute(OutTextBox.Text, null).ToString();
+                {
+                    checkStr = new DataTable().Compute(OutTextBox.Text, null).ToString();
+                    if (checkStr.Length > 26)
+                        OutTextBox.Text = checkStr.Remove(26, checkStr.Length - 26);
+                    else
+                        OutTextBox.Text = new DataTable().Compute(OutTextBox.Text, null).ToString();
+                }
+
                 lastSymbolPos.Clear();
                 symbolsCount = 0;
             }

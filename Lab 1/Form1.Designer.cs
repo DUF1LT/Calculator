@@ -307,6 +307,7 @@ namespace Lab_1
             // 
             this.OutTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.OutTextBox.Location = new System.Drawing.Point(13, 23);
+            this.OutTextBox.MaxLength = 10;
             this.OutTextBox.Multiline = true;
             this.OutTextBox.Name = "OutTextBox";
             this.OutTextBox.ReadOnly = true;
